@@ -1,0 +1,2 @@
+import { matches, players } from '@/data/mock';
+export default function PlayersPage(){return <div className="container-page space-y-3"><h2 className="text-2xl font-bold text-gold">选手</h2>{players.map((p)=>{const recent=matches.find((m)=>m.playerA===p.name||m.playerB===p.name);return <div className="card" key={p.id}><p>{p.name} · {p.race} · {p.country}</p><p>最近比赛：{recent ? `${recent.playerA} vs ${recent.playerB}` : '暂无'}</p></div>})}</div>}
