@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Player {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  race      String
+  country   String
+  matchesA  Match[]  @relation("MatchPlayerA")
+  matchesB  Match[]  @relation("MatchPlayerB")
+  createdAt DateTime @default(now())
+}
+
+model Tournament {
+  id        String   @id @default(cuid())
+  name      String
+  matches   Match[]
+  createdAt DateTime @default(now())
+}
+
+model Match {
+  id           String     @id @default(cuid())
+  status       String
+  score        String
+  mapScore     String?
+  startTime    DateTime
+  streamUrl    String?
+  replayUrl    String?
+  playerAId    String
+  playerBId    String
+  tournamentId String
+  playerA      Player     @relation("MatchPlayerA", fields: [playerAId], references: [id])
+  playerB      Player     @relation("MatchPlayerB", fields: [playerBId], references: [id])
+  tournament   Tournament @relation(fields: [tournamentId], references: [id])
+  replays      Replay[]
+  videos       Video[]
+  createdAt    DateTime   @default(now())
+}
+
+model Replay {
+  id        String   @id @default(cuid())
+  title     String
+  map       String
+  version   String
+  sourceId  String
+  source    Source   @relation(fields: [sourceId], references: [id])
+  matchId   String?
+  match     Match?   @relation(fields: [matchId], references: [id])
+  fileUrl   String
+  createdAt DateTime @default(now())
+}
+
+model Video {
+  id          String   @id @default(cuid())
+  title       String
+  platform    String
+  channel     String
+  coverUrl    String?
+  videoUrl    String
+  publishedAt DateTime
+  sourceId    String
+  source      Source   @relation(fields: [sourceId], references: [id])
+  matchId     String?
+  match       Match?   @relation(fields: [matchId], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+model Source {
+  id      String   @id @default(cuid())
+  name    String
+  url     String?
+  replays Replay[]
+  videos  Video[]
+}

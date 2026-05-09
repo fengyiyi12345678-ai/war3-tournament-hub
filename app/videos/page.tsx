@@ -1,0 +1,2 @@
+import { videos } from '@/data/mock';
+export default function VideosPage(){return <div className="container-page space-y-3"><h2 className="text-2xl font-bold text-gold">比赛视频</h2><div className="grid gap-4 md:grid-cols-2">{videos.map((v)=><div key={v.id} className="card"><img src={v.cover} alt={v.title} className="mb-2 rounded"/><p>{v.title}</p><p>{v.platform} · {v.channel}</p><p>{v.publishedAt}</p><a className="underline" href={v.url} target="_blank">视频链接</a></div>)}</div></div>}
