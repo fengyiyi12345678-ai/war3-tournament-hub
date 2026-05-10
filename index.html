@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>足球分析中心 · Football Analysis Hub</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <div class="brand-mark">⚽</div>
+        <div>
+          <h1>足球分析中心</h1>
+          <p class="brand-sub">Major League Fixtures · Odds · Schedule</p>
+        </div>
+      </div>
+      <nav class="top-nav">
+        <a href="#fixtures" class="active">对阵</a>
+        <a href="#odds">赔率</a>
+        <a href="#schedule">赛程</a>
+        <a href="#standings">积分榜</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-text">
+        <h2>主流联赛 · 一站式分析</h2>
+        <p>覆盖英超、西甲、德甲、意甲、法甲与欧冠。提供对阵预告、最新赔率走势、未来赛程与积分榜分析。</p>
+      </div>
+      <div class="hero-stats">
+        <div><strong id="stat-matches">0</strong><span>本周比赛</span></div>
+        <div><strong id="stat-leagues">6</strong><span>主流联赛</span></div>
+        <div><strong id="stat-teams">0</strong><span>参赛球队</span></div>
+      </div>
+    </div>
+  </section>
+
+  <main class="container">
+    <!-- League selector -->
+    <section class="league-bar">
+      <button class="league-btn active" data-league="all">全部</button>
+      <button class="league-btn" data-league="EPL">英超</button>
+      <button class="league-btn" data-league="LaLiga">西甲</button>
+      <button class="league-btn" data-league="Bundesliga">德甲</button>
+      <button class="league-btn" data-league="SerieA">意甲</button>
+      <button class="league-btn" data-league="Ligue1">法甲</button>
+      <button class="league-btn" data-league="UCL">欧冠</button>
+    </section>
+
+    <!-- Fixtures + Odds -->
+    <section id="fixtures" class="card-section">
+      <div class="section-head">
+        <h3>对阵 & 赔率</h3>
+        <div class="filter-group">
+          <label>日期：
+            <select id="date-filter">
+              <option value="all">全部</option>
+            </select>
+          </label>
+          <label>排序：
+            <select id="sort-filter">
+              <option value="time">按时间</option>
+              <option value="odds">按主胜赔率</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div id="match-list" class="match-grid"></div>
+      <p id="empty-msg" class="empty hidden">暂无符合条件的比赛。</p>
+    </section>
+
+    <!-- Schedule -->
+    <section id="schedule" class="card-section">
+      <div class="section-head">
+        <h3>未来赛程</h3>
+        <span class="hint">按日期分组展示</span>
+      </div>
+      <div id="schedule-list" class="schedule-list"></div>
+    </section>
+
+    <!-- Standings -->
+    <section id="standings" class="card-section">
+      <div class="section-head">
+        <h3>联赛积分榜</h3>
+        <div class="filter-group">
+          <label>选择联赛：
+            <select id="standing-league">
+              <option value="EPL">英超</option>
+              <option value="LaLiga">西甲</option>
+              <option value="Bundesliga">德甲</option>
+              <option value="SerieA">意甲</option>
+              <option value="Ligue1">法甲</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table id="standings-table" class="standings">
+          <thead>
+            <tr>
+              <th>#</th><th>球队</th><th>赛</th><th>胜</th><th>平</th><th>负</th>
+              <th>进</th><th>失</th><th>净</th><th>分</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 足球分析中心 · 数据仅供参考，赔率与赛程以官方公告为准。</p>
+    </div>
+  </footer>
+
+  <!-- Match detail modal -->
+  <div id="modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-panel" role="dialog" aria-modal="true">
+      <button class="modal-close" data-close aria-label="关闭">×</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
