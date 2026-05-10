@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>冰封王座竞技场 · Warcraft III Frozen Throne Tournament Hub</title>
+<meta name="description" content="魔兽争霸 III 冰封王座赛事中心：实时赛事信息、比赛录像下载、高清比赛视频回放。" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container nav-bar">
+    <a class="logo" href="#top">
+      <span class="logo-rune">❄</span>
+      <span class="logo-text">冰封王座竞技场</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#live">实时赛事</a>
+      <a href="#schedule">赛程</a>
+      <a href="#replays">比赛录像</a>
+      <a href="#videos">比赛视频</a>
+      <a href="#rankings">选手榜</a>
+    </nav>
+    <div class="lang-toggle">
+      <button class="btn-ghost" id="themeToggle" aria-label="切换主题">🌙</button>
+    </div>
+  </div>
+</header>
+
+<section id="top" class="hero">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="container hero-inner">
+    <div class="hero-tag">Reign of Chaos · The Frozen Throne</div>
+    <h1 class="hero-title">霜之哀伤永不熄灭</h1>
+    <p class="hero-sub">全球魔兽争霸 III 冰封王座赛事一站式中心 — 实时战报、原始录像、精选视频。</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#live">查看实时赛事</a>
+      <a class="btn btn-outline" href="#replays">下载比赛录像</a>
+    </div>
+    <div class="hero-stats">
+      <div><strong id="stat-live">3</strong><span>正在进行</span></div>
+      <div><strong id="stat-today">12</strong><span>今日对局</span></div>
+      <div><strong id="stat-replays">248</strong><span>录像库</span></div>
+      <div><strong id="stat-videos">86</strong><span>精选视频</span></div>
+    </div>
+  </div>
+</section>
+
+<main class="container">
+
+  <!-- LIVE -->
+  <section id="live" class="section">
+    <div class="section-head">
+      <h2><span class="dot dot-live"></span>实时赛事</h2>
+      <p>当前正在直播或刚刚结束的对局，自动刷新中。</p>
+    </div>
+    <div class="grid grid-3" id="liveGrid"></div>
+  </section>
+
+  <!-- SCHEDULE -->
+  <section id="schedule" class="section">
+    <div class="section-head">
+      <h2>近期赛程</h2>
+      <p>未来 7 天内即将开战的关键对局。</p>
+    </div>
+    <div class="schedule-table-wrap">
+      <table class="schedule-table" id="scheduleTable">
+        <thead>
+          <tr>
+            <th>时间</th>
+            <th>赛事</th>
+            <th>选手</th>
+            <th>赛制</th>
+            <th>直播</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- REPLAYS -->
+  <section id="replays" class="section">
+    <div class="section-head">
+      <h2>比赛录像 · Replays</h2>
+      <p>原始 .w3g 录像文件，使用魔兽争霸 III 1.27 / 1.36 客户端加载。</p>
+    </div>
+    <div class="filters">
+      <button class="chip active" data-filter="all">全部</button>
+      <button class="chip" data-filter="HUM">人族</button>
+      <button class="chip" data-filter="ORC">兽族</button>
+      <button class="chip" data-filter="UD">不死</button>
+      <button class="chip" data-filter="NE">暗夜</button>
+    </div>
+    <div class="grid grid-2" id="replayGrid"></div>
+  </section>
+
+  <!-- VIDEOS -->
+  <section id="videos" class="section">
+    <div class="section-head">
+      <h2>比赛视频 · Highlights</h2>
+      <p>由解说精选的高光对局与战术复盘。</p>
+    </div>
+    <div class="grid grid-3" id="videoGrid"></div>
+  </section>
+
+  <!-- RANKINGS -->
+  <section id="rankings" class="section">
+    <div class="section-head">
+      <h2>选手榜单</h2>
+      <p>基于近 90 天 ELO 与赛事积分综合排名。</p>
+    </div>
+    <ol class="rank-list" id="rankList"></ol>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <div class="logo">
+        <span class="logo-rune">❄</span>
+        <span class="logo-text">冰封王座竞技场</span>
+      </div>
+      <p class="muted">非官方爱好者站点 · Warcraft III™ © Blizzard Entertainment</p>
+    </div>
+    <div class="footer-cols">
+      <div>
+        <h4>赛事</h4>
+        <a href="#live">实时赛事</a>
+        <a href="#schedule">赛程</a>
+        <a href="#rankings">选手榜</a>
+      </div>
+      <div>
+        <h4>资源</h4>
+        <a href="#replays">录像库</a>
+        <a href="#videos">视频集锦</a>
+        <a href="#">解说招募</a>
+      </div>
+      <div>
+        <h4>联系</h4>
+        <a href="#">投稿录像</a>
+        <a href="#">商务合作</a>
+        <a href="#">关于我们</a>
+      </div>
+    </div>
+  </div>
+  <div class="copy">© 2026 War3 Tournament Hub · Built for the community.</div>
+</footer>
+
+<!-- Video modal -->
+<div class="modal" id="videoModal" aria-hidden="true">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-body">
+    <button class="modal-close" data-close aria-label="关闭">×</button>
+    <div class="video-frame" id="videoFrame"></div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
