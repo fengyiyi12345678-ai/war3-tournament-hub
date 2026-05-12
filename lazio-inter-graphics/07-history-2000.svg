@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="1080" height="1350">
+  <defs>
+    <linearGradient id="bg7" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3A2E1F"/>
+      <stop offset="100%" stop-color="#0F0A06"/>
+    </linearGradient>
+    <pattern id="noise" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
+      <rect width="8" height="8" fill="#000"/>
+      <circle cx="2" cy="2" r="0.5" fill="#fff" opacity="0.15"/>
+      <circle cx="6" cy="5" r="0.5" fill="#fff" opacity="0.1"/>
+    </pattern>
+    <filter id="sepia">
+      <feColorMatrix type="matrix" values="0.393 0.769 0.189 0 0
+                                            0.349 0.686 0.168 0 0
+                                            0.272 0.534 0.131 0 0
+                                            0 0 0 1 0"/>
+    </filter>
+    <style>.zh { font-family: 'PingFang SC','Microsoft YaHei','Source Han Sans CN',sans-serif; }
+    .vintage { font-family: 'Georgia','Times New Roman',serif; }
+    </style>
+  </defs>
+  <rect width="1080" height="1350" fill="url(#bg7)"/>
+  <rect width="1080" height="1350" fill="url(#noise)" opacity="0.4"/>
+
+  <!-- Film frame border -->
+  <rect x="30" y="30" width="1020" height="1290" fill="none" stroke="#D4AF37" stroke-width="3" opacity="0.6"/>
+  <rect x="50" y="50" width="980" height="1250" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.4"/>
+
+  <!-- Film perforations top -->
+  <g fill="#D4AF37" opacity="0.5">
+    <rect x="80" y="80" width="30" height="50"/>
+    <rect x="150" y="80" width="30" height="50"/>
+    <rect x="220" y="80" width="30" height="50"/>
+    <rect x="900" y="80" width="30" height="50"/>
+    <rect x="970" y="80" width="30" height="50"/>
+  </g>
+
+  <!-- Header -->
+  <text x="540" y="220" text-anchor="middle" class="vintage" font-size="36" font-style="italic" fill="#D4AF37" letter-spacing="8">— ARCHIVE · 2000 —</text>
+
+  <!-- Big year -->
+  <text x="540" y="450" text-anchor="middle" class="zh" font-size="220" font-weight="900" fill="#D4AF37" letter-spacing="-5">2000</text>
+  <text x="540" y="520" text-anchor="middle" class="zh" font-size="44" font-weight="700" fill="#fff" opacity="0.85">那年五月 · 罗马的春天</text>
+
+  <!-- Score block -->
+  <g transform="translate(140,610)">
+    <rect width="800" height="220" rx="20" fill="#000" opacity="0.7" stroke="#D4AF37" stroke-width="2"/>
+    <text x="400" y="80" text-anchor="middle" class="zh" font-size="40" font-weight="800" fill="#D4AF37">两回合总比分</text>
+    <text x="400" y="180" text-anchor="middle" class="zh" font-size="100" font-weight="900" fill="#fff">拉齐奥 2-1 国米</text>
+  </g>
+
+  <!-- Caption -->
+  <g transform="translate(80,880)">
+    <text x="460" y="40" text-anchor="middle" class="zh" font-size="36" font-weight="700" fill="#fff">那一年</text>
+    <text x="460" y="100" text-anchor="middle" class="zh" font-size="36" font-weight="700" fill="#fff">内德维德、西蒙尼……</text>
+    <text x="460" y="160" text-anchor="middle" class="zh" font-size="36" font-weight="700" fill="#fff">拉齐奥拿下双冠王</text>
+    <text x="460" y="240" text-anchor="middle" class="zh" font-size="44" font-weight="900" fill="#D4AF37">↓ 26 年后 · 历史会重演吗 ↓</text>
+  </g>
+
+  <!-- Film perforations bottom -->
+  <g fill="#D4AF37" opacity="0.5">
+    <rect x="80" y="1220" width="30" height="50"/>
+    <rect x="150" y="1220" width="30" height="50"/>
+    <rect x="220" y="1220" width="30" height="50"/>
+    <rect x="900" y="1220" width="30" height="50"/>
+    <rect x="970" y="1220" width="30" height="50"/>
+  </g>
+
+  <text x="1020" y="1340" text-anchor="end" class="zh" font-size="26" font-weight="700" fill="#D4AF37" opacity="0.8">◀ 07 / 10 ▶</text>
+</svg>

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="1080" height="1350">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0A0E27"/>
+      <stop offset="100%" stop-color="#1A1A2E"/>
+    </linearGradient>
+    <radialGradient id="spot2" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#FFD700" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#FFD700" stop-opacity="0"/>
+    </radialGradient>
+    <style>.zh { font-family: 'PingFang SC','Microsoft YaHei','Source Han Sans CN',sans-serif; }</style>
+  </defs>
+  <rect width="1080" height="1350" fill="url(#bg2)"/>
+  <rect width="1080" height="1350" fill="url(#spot2)"/>
+
+  <!-- Decorative lines -->
+  <line x1="100" y1="180" x2="980" y2="180" stroke="#FFD700" stroke-width="2" opacity="0.4"/>
+  <line x1="100" y1="1170" x2="980" y2="1170" stroke="#FFD700" stroke-width="2" opacity="0.4"/>
+
+  <!-- Top kicker -->
+  <text x="540" y="240" text-anchor="middle" class="zh" font-size="32" font-weight="700" fill="#FFD700" letter-spacing="10">━━ 一段尘封 26 年的恩怨 ━━</text>
+
+  <!-- Huge number -->
+  <text x="540" y="600" text-anchor="middle" class="zh" font-size="420" font-weight="900" fill="#FFD700" letter-spacing="-10">26</text>
+  <text x="540" y="700" text-anchor="middle" class="zh" font-size="80" font-weight="900" fill="#fff">年了</text>
+
+  <!-- Subtext -->
+  <text x="540" y="860" text-anchor="middle" class="zh" font-size="44" font-weight="700" fill="#fff">国米和拉齐奥</text>
+  <text x="540" y="930" text-anchor="middle" class="zh" font-size="44" font-weight="700" fill="#fff">又一次在意大利杯决赛</text>
+  <text x="540" y="1000" text-anchor="middle" class="zh" font-size="44" font-weight="700" fill="#fff">站到了对方面前</text>
+
+  <!-- Year tag -->
+  <g transform="translate(340,1050)">
+    <rect width="400" height="80" rx="40" fill="none" stroke="#E63946" stroke-width="4"/>
+    <text x="200" y="55" text-anchor="middle" class="zh" font-size="36" font-weight="900" fill="#E63946">上一次相遇 · 2000 年</text>
+  </g>
+
+  <!-- Page indicator -->
+  <text x="1020" y="1320" text-anchor="end" class="zh" font-size="26" font-weight="700" fill="#fff" opacity="0.6">◀ 02 / 10 ▶</text>
+</svg>

@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="1080" height="1350">
+  <defs>
+    <linearGradient id="bg9" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0F2027"/>
+      <stop offset="50%" stop-color="#203A43"/>
+      <stop offset="100%" stop-color="#2C5364"/>
+    </linearGradient>
+    <pattern id="grid9" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M60 0 L0 0 0 60" fill="none" stroke="#fff" stroke-width="0.5" opacity="0.05"/>
+    </pattern>
+    <style>.zh { font-family: 'PingFang SC','Microsoft YaHei','Source Han Sans CN',sans-serif; }
+    .mono { font-family: 'SF Mono','Menlo','Consolas',monospace; }
+    </style>
+  </defs>
+  <rect width="1080" height="1350" fill="url(#bg9)"/>
+  <rect width="1080" height="1350" fill="url(#grid9)"/>
+
+  <!-- Header badge -->
+  <g transform="translate(340,80)">
+    <rect width="400" height="80" rx="40" fill="#FFD700"/>
+    <text x="200" y="55" text-anchor="middle" class="zh" font-size="36" font-weight="900" fill="#000">🎲 主播预测</text>
+  </g>
+
+  <text x="540" y="230" text-anchor="middle" class="zh" font-size="44" font-weight="800" fill="#fff">本场比赛 · 三个判断</text>
+  <text x="540" y="280" text-anchor="middle" class="zh" font-size="26" font-weight="600" fill="#FFD700" letter-spacing="4">仅供娱乐 · 不作投注建议</text>
+
+  <!-- Card 1: Odds -->
+  <g transform="translate(80,340)">
+    <rect width="920" height="220" rx="20" fill="#0a1620" stroke="#FFD700" stroke-width="3"/>
+    <g transform="translate(40,30)">
+      <rect width="100" height="100" rx="20" fill="#FFD700"/>
+      <text x="50" y="68" text-anchor="middle" font-size="60">📊</text>
+    </g>
+    <text x="180" y="80" class="zh" font-size="34" font-weight="700" fill="#FFD700">盘口预测</text>
+    <text x="180" y="150" class="zh" font-size="56" font-weight="900" fill="#fff">国米 半球 ~ 半一</text>
+    <text x="180" y="195" class="zh" font-size="26" font-weight="600" fill="#8FB9D6">伤停拖累 · 让步从浅</text>
+  </g>
+
+  <!-- Card 2: Score -->
+  <g transform="translate(80,590)">
+    <rect width="920" height="220" rx="20" fill="#0a1620" stroke="#E63946" stroke-width="3"/>
+    <g transform="translate(40,30)">
+      <rect width="100" height="100" rx="20" fill="#E63946"/>
+      <text x="50" y="68" text-anchor="middle" font-size="60">⚽</text>
+    </g>
+    <text x="180" y="80" class="zh" font-size="34" font-weight="700" fill="#E63946">比分倾向</text>
+    <g transform="translate(180,110)">
+      <rect width="180" height="70" rx="10" fill="#E63946"/>
+      <text x="90" y="50" text-anchor="middle" class="mono" font-size="44" font-weight="900" fill="#fff">1-2</text>
+      <rect x="200" width="180" height="70" rx="10" fill="#FF6B7A"/>
+      <text x="290" y="50" text-anchor="middle" class="mono" font-size="44" font-weight="900" fill="#fff">1-1</text>
+      <rect x="400" width="180" height="70" rx="10" fill="#A91020"/>
+      <text x="490" y="50" text-anchor="middle" class="mono" font-size="44" font-weight="900" fill="#fff">0-2</text>
+    </g>
+    <text x="180" y="200" class="zh" font-size="26" font-weight="600" fill="#FFB4BB">小球为主 · 进球集中在第二段</text>
+  </g>
+
+  <!-- Card 3: Insight -->
+  <g transform="translate(80,840)">
+    <rect width="920" height="220" rx="20" fill="#0a1620" stroke="#00FF88" stroke-width="3"/>
+    <g transform="translate(40,30)">
+      <rect width="100" height="100" rx="20" fill="#00FF88"/>
+      <text x="50" y="68" text-anchor="middle" font-size="60">🔮</text>
+    </g>
+    <text x="180" y="80" class="zh" font-size="34" font-weight="700" fill="#00FF88">核心看点</text>
+    <text x="180" y="140" class="zh" font-size="42" font-weight="900" fill="#fff">拉齐奥拖入加时</text>
+    <text x="180" y="195" class="zh" font-size="26" font-weight="600" fill="#A0E5C5">→ 进入点球大战概率 30%+</text>
+  </g>
+
+  <!-- Footer -->
+  <g transform="translate(0,1130)">
+    <rect width="1080" height="220" fill="#000"/>
+    <text x="540" y="80" text-anchor="middle" class="zh" font-size="40" font-weight="900" fill="#FFD700">⚠️ 重要提示</text>
+    <text x="540" y="140" text-anchor="middle" class="zh" font-size="30" font-weight="700" fill="#fff">预测仅代表个人观点 · 理性观赛</text>
+    <text x="540" y="190" text-anchor="middle" class="zh" font-size="30" font-weight="700" fill="#fff">拒绝任何形式赌球</text>
+  </g>
+
+  <text x="1020" y="1340" text-anchor="end" class="zh" font-size="22" font-weight="700" fill="#fff" opacity="0.7">◀ 09 / 10 ▶</text>
+</svg>

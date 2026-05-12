@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="1080" height="1350">
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8B0000"/>
+      <stop offset="50%" stop-color="#E63946"/>
+      <stop offset="100%" stop-color="#3D0000"/>
+    </linearGradient>
+    <radialGradient id="glow1" cx="0.5" cy="0.4" r="0.6">
+      <stop offset="0%" stop-color="#FFD700" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#FFD700" stop-opacity="0"/>
+    </radialGradient>
+    <style>
+      .zh { font-family: 'PingFang SC','Microsoft YaHei','Source Han Sans CN','Noto Sans CJK SC',sans-serif; }
+    </style>
+  </defs>
+  <rect width="1080" height="1350" fill="url(#bg1)"/>
+  <rect width="1080" height="1350" fill="url(#glow1)"/>
+
+  <!-- LIVE badge -->
+  <g transform="translate(60,60)">
+    <rect width="200" height="64" rx="32" fill="#FF0033"/>
+    <circle cx="36" cy="32" r="10" fill="#fff">
+      <animate attributeName="opacity" values="1;0.3;1" dur="1.2s" repeatCount="indefinite"/>
+    </circle>
+    <text x="60" y="44" class="zh" font-size="32" font-weight="900" fill="#fff" letter-spacing="2">LIVE</text>
+    <text x="125" y="44" class="zh" font-size="26" font-weight="700" fill="#fff">直播预热</text>
+  </g>
+
+  <!-- Top tag -->
+  <text x="540" y="220" text-anchor="middle" class="zh" font-size="36" font-weight="700" fill="#FFD700" letter-spacing="6">⚽ 意大利杯决赛特辑</text>
+
+  <!-- Main headline -->
+  <text x="540" y="430" text-anchor="middle" class="zh" font-size="130" font-weight="900" fill="#fff">国米要双冠？</text>
+  <text x="540" y="600" text-anchor="middle" class="zh" font-size="92" font-weight="900" fill="#FFD700">拉齐奥说：</text>
+  <text x="540" y="740" text-anchor="middle" class="zh" font-size="130" font-weight="900" fill="#fff">想都别想！</text>
+
+  <!-- Trophy icon -->
+  <g transform="translate(440,820)">
+    <path d="M100 0 L100 30 L160 30 Q180 30 180 60 Q180 110 130 130 L130 160 L160 180 L160 200 L40 200 L40 180 L70 160 L70 130 Q20 110 20 60 Q20 30 40 30 L100 30 Z"
+          fill="#FFD700" stroke="#FFA500" stroke-width="4"/>
+    <text x="100" y="155" text-anchor="middle" font-size="40" font-weight="900" fill="#8B4513">26</text>
+  </g>
+
+  <!-- Bottom info bar -->
+  <rect x="0" y="1180" width="1080" height="170" fill="#000"/>
+  <text x="540" y="1240" text-anchor="middle" class="zh" font-size="44" font-weight="800" fill="#fff">🏟 罗马奥林匹克 · 今晚 21:00</text>
+  <text x="540" y="1300" text-anchor="middle" class="zh" font-size="32" font-weight="600" fill="#FFD700" letter-spacing="4">LAZIO 🆚 INTER · 2025-26 COPPA ITALIA</text>
+
+  <!-- Page indicator -->
+  <text x="1020" y="1340" text-anchor="end" class="zh" font-size="26" font-weight="700" fill="#fff" opacity="0.6">01 / 10 ▶</text>
+</svg>

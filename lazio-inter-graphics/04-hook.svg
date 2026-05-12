@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="1080" height="1350">
+  <defs>
+    <linearGradient id="bg4" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFEB3B"/>
+      <stop offset="100%" stop-color="#FF6F00"/>
+    </linearGradient>
+    <pattern id="dots" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="20" r="2" fill="#000" opacity="0.08"/>
+    </pattern>
+    <style>.zh { font-family: 'PingFang SC','Microsoft YaHei','Source Han Sans CN',sans-serif; }</style>
+  </defs>
+  <rect width="1080" height="1350" fill="url(#bg4)"/>
+  <rect width="1080" height="1350" fill="url(#dots)"/>
+
+  <!-- Top tape -->
+  <g transform="translate(0,100) rotate(-3 540 50)">
+    <rect x="-50" y="0" width="1200" height="100" fill="#000"/>
+    <text x="540" y="68" text-anchor="middle" class="zh" font-size="42" font-weight="900" fill="#FFEB3B" letter-spacing="6">⚠ 等等 ⚠ 等等 ⚠ 等等 ⚠</text>
+  </g>
+
+  <!-- Main copy -->
+  <text x="540" y="380" text-anchor="middle" class="zh" font-size="60" font-weight="800" fill="#000">但是兄弟……</text>
+
+  <text x="540" y="560" text-anchor="middle" class="zh" font-size="84" font-weight="900" fill="#000">足球要是</text>
+  <text x="540" y="680" text-anchor="middle" class="zh" font-size="84" font-weight="900" fill="#000">按账面踢</text>
+
+  <!-- Big shocked face block -->
+  <g transform="translate(330,750)">
+    <rect width="420" height="220" rx="30" fill="#000" transform="rotate(-2)"/>
+    <text x="210" y="100" text-anchor="middle" class="zh" font-size="130" font-weight="900" fill="#FFEB3B" transform="rotate(-2)">看个</text>
+    <text x="210" y="200" text-anchor="middle" font-size="100" transform="rotate(-2)">🐶 啊？！</text>
+  </g>
+
+  <!-- Bottom strip -->
+  <g transform="translate(0,1080)">
+    <rect width="1080" height="180" fill="#000"/>
+    <text x="540" y="80" text-anchor="middle" class="zh" font-size="46" font-weight="900" fill="#fff">真正的悬念</text>
+    <text x="540" y="140" text-anchor="middle" class="zh" font-size="46" font-weight="900" fill="#FFEB3B">藏在 4 个细节里 👉</text>
+  </g>
+
+  <text x="1020" y="1320" text-anchor="end" class="zh" font-size="26" font-weight="700" fill="#000" opacity="0.7">◀ 04 / 10 ▶</text>
+</svg>

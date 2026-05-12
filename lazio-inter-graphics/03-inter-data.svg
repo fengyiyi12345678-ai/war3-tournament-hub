@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="1080" height="1350">
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#001A4D"/>
+      <stop offset="100%" stop-color="#000814"/>
+    </linearGradient>
+    <style>.zh { font-family: 'PingFang SC','Microsoft YaHei','Source Han Sans CN',sans-serif; }</style>
+  </defs>
+  <rect width="1080" height="1350" fill="url(#bg3)"/>
+
+  <!-- Inter stripe pattern -->
+  <g opacity="0.06">
+    <rect x="0" y="0" width="60" height="1350" fill="#fff"/>
+    <rect x="120" y="0" width="60" height="1350" fill="#fff"/>
+    <rect x="240" y="0" width="60" height="1350" fill="#fff"/>
+    <rect x="900" y="0" width="60" height="1350" fill="#fff"/>
+    <rect x="1020" y="0" width="60" height="1350" fill="#fff"/>
+  </g>
+
+  <!-- Top label -->
+  <g transform="translate(380,80)">
+    <rect width="320" height="70" rx="35" fill="#0033A0"/>
+    <text x="160" y="48" text-anchor="middle" class="zh" font-size="32" font-weight="900" fill="#fff">📊 账面数据</text>
+  </g>
+
+  <!-- Headline -->
+  <text x="540" y="240" text-anchor="middle" class="zh" font-size="60" font-weight="900" fill="#fff">所有数据 都站国米</text>
+
+  <!-- Giant 3-0 -->
+  <g transform="translate(540,420)">
+    <text text-anchor="middle" class="zh" font-size="280" font-weight="900" fill="#E63946" letter-spacing="-10">3-0</text>
+    <text y="80" text-anchor="middle" class="zh" font-size="34" font-weight="700" fill="#FFD700">3 天前同球场 · 暴击拉齐奥</text>
+  </g>
+
+  <!-- Data list -->
+  <g transform="translate(100,720)">
+    <!-- Item 1 -->
+    <rect width="880" height="110" rx="16" fill="#fff" opacity="0.08"/>
+    <text x="40" y="70" class="zh" font-size="52" font-weight="900" fill="#00FF66">✓</text>
+    <text x="120" y="50" class="zh" font-size="36" font-weight="800" fill="#fff">已锁定 第 21 座 意甲冠军</text>
+    <text x="120" y="90" class="zh" font-size="26" font-weight="600" fill="#FFD700">场均拿 2.4 分 · 联赛绝对统治力</text>
+  </g>
+  <g transform="translate(100,860)">
+    <rect width="880" height="110" rx="16" fill="#fff" opacity="0.08"/>
+    <text x="40" y="70" class="zh" font-size="52" font-weight="900" fill="#00FF66">✓</text>
+    <text x="120" y="50" class="zh" font-size="36" font-weight="800" fill="#fff">同球场 · 3 天前 · 3-0 拉齐奥</text>
+    <text x="120" y="90" class="zh" font-size="26" font-weight="600" fill="#FFD700">劳塔罗 / 苏契奇 / 姆希塔良</text>
+  </g>
+  <g transform="translate(100,1000)">
+    <rect width="880" height="110" rx="16" fill="#fff" opacity="0.08"/>
+    <text x="40" y="70" class="zh" font-size="52" font-weight="900" fill="#00FF66">✓</text>
+    <text x="120" y="50" class="zh" font-size="36" font-weight="800" fill="#fff">近 8 次交手 6 胜 2 平 0 负</text>
+    <text x="120" y="90" class="zh" font-size="26" font-weight="600" fill="#FFD700">进 21 球 · 仅丢 4 球 · 5 次零封</text>
+  </g>
+
+  <!-- Footer -->
+  <text x="540" y="1230" text-anchor="middle" class="zh" font-size="40" font-weight="900" fill="#E63946">这场比赛 · 还有悬念吗？</text>
+
+  <text x="1020" y="1320" text-anchor="end" class="zh" font-size="26" font-weight="700" fill="#fff" opacity="0.6">◀ 03 / 10 ▶</text>
+</svg>

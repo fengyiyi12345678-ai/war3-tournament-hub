@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="1080" height="1350">
+  <defs>
+    <linearGradient id="bgL" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3D3D3D"/>
+      <stop offset="100%" stop-color="#1A1A1A"/>
+    </linearGradient>
+    <linearGradient id="bgR" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E63946"/>
+      <stop offset="100%" stop-color="#8B0000"/>
+    </linearGradient>
+    <style>.zh { font-family: 'PingFang SC','Microsoft YaHei','Source Han Sans CN',sans-serif; }</style>
+  </defs>
+
+  <!-- Title bar -->
+  <rect width="1080" height="160" fill="#000"/>
+  <text x="540" y="80" text-anchor="middle" class="zh" font-size="42" font-weight="900" fill="#FFD700">🎯 这场决赛的真相是</text>
+  <text x="540" y="130" text-anchor="middle" class="zh" font-size="32" font-weight="700" fill="#fff">动机 决定 结果</text>
+
+  <!-- Left side: Inter -->
+  <rect x="0" y="160" width="540" height="1010" fill="url(#bgL)"/>
+  <text x="270" y="280" text-anchor="middle" class="zh" font-size="60" font-weight="900" fill="#fff">国 米</text>
+  <text x="270" y="340" text-anchor="middle" class="zh" font-size="28" font-weight="700" fill="#aaa">INTER MILAN</text>
+
+  <text x="270" y="500" text-anchor="middle" font-size="160">🍰</text>
+
+  <text x="270" y="640" text-anchor="middle" class="zh" font-size="48" font-weight="900" fill="#fff">已经拿了</text>
+  <text x="270" y="710" text-anchor="middle" class="zh" font-size="48" font-weight="900" fill="#fff">意甲冠军</text>
+
+  <g transform="translate(45,790)">
+    <rect width="450" height="100" rx="20" fill="#fff" opacity="0.1"/>
+    <text x="225" y="65" text-anchor="middle" class="zh" font-size="44" font-weight="900" fill="#FFD700">这是 · 甜点</text>
+  </g>
+
+  <text x="270" y="970" text-anchor="middle" class="zh" font-size="30" font-weight="600" fill="#aaa">输了也无伤大雅</text>
+  <text x="270" y="1020" text-anchor="middle" class="zh" font-size="30" font-weight="600" fill="#aaa">轮换 · 试新人 · 留体能</text>
+
+  <!-- Right side: Lazio -->
+  <rect x="540" y="160" width="540" height="1010" fill="url(#bgR)"/>
+  <text x="810" y="280" text-anchor="middle" class="zh" font-size="60" font-weight="900" fill="#fff">拉齐奥</text>
+  <text x="810" y="340" text-anchor="middle" class="zh" font-size="28" font-weight="700" fill="#FFD700">SS LAZIO</text>
+
+  <text x="810" y="500" text-anchor="middle" font-size="160">🆘</text>
+
+  <text x="810" y="640" text-anchor="middle" class="zh" font-size="48" font-weight="900" fill="#fff">整个赛季</text>
+  <text x="810" y="710" text-anchor="middle" class="zh" font-size="48" font-weight="900" fill="#fff">唯一的冠军</text>
+
+  <g transform="translate(585,790)">
+    <rect width="450" height="100" rx="20" fill="#fff"/>
+    <text x="225" y="65" text-anchor="middle" class="zh" font-size="42" font-weight="900" fill="#E63946">这是 · 救命稻草</text>
+  </g>
+
+  <text x="810" y="970" text-anchor="middle" class="zh" font-size="30" font-weight="700" fill="#fff">主力全上 · 体能耗尽也要拼</text>
+  <text x="810" y="1020" text-anchor="middle" class="zh" font-size="30" font-weight="700" fill="#fff">一寸山河一寸血</text>
+
+  <!-- Divider VS -->
+  <circle cx="540" cy="660" r="80" fill="#000" stroke="#FFD700" stroke-width="6"/>
+  <text x="540" y="685" text-anchor="middle" class="zh" font-size="56" font-weight="900" fill="#FFD700">VS</text>
+
+  <!-- Bottom punch -->
+  <rect y="1170" width="1080" height="180" fill="#000"/>
+  <text x="540" y="1250" text-anchor="middle" class="zh" font-size="46" font-weight="900" fill="#fff">一个想吃，一个豁命</text>
+  <text x="540" y="1310" text-anchor="middle" class="zh" font-size="46" font-weight="900" fill="#FFD700">你说 · 谁更狠？</text>
+
+  <text x="1020" y="1340" text-anchor="end" class="zh" font-size="22" font-weight="700" fill="#fff" opacity="0.6">◀ 08 / 10 ▶</text>
+</svg>
