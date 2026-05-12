@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "storyboard",
+  "description": "Agent 1 输出的 3x3 九宫格分镜结构，作为 Agent 2 的输入",
+  "type": "object",
+  "required": ["global_style_anchor", "product_anchor", "cells"],
+  "properties": {
+    "global_style_anchor": {
+      "type": "string",
+      "description": "全局风格锚词，3-6 个关键词，逗号分隔。每个 cell 的 image_prompt 开头都会包含这串词。"
+    },
+    "product_anchor": {
+      "type": "string",
+      "description": "产品锚描述（15-25 字），用于在 9 个 cell 中保持产品视觉一致性"
+    },
+    "cells": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "items": { "$ref": "#/definitions/cell" }
+    }
+  },
+  "definitions": {
+    "cell": {
+      "type": "object",
+      "required": [
+        "shot_id", "role", "position", "duration_sec",
+        "camera", "lens", "lighting", "composition",
+        "mood", "action", "image_prompt", "subtitle"
+      ],
+      "properties": {
+        "shot_id": {
+          "type": "string",
+          "pattern": "^0[1-9]$",
+          "description": "镜头编号 01-09"
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "opening_hook",
+            "hero_visual",
+            "scene_context",
+            "macro_detail",
+            "core_benefit",
+            "usage_action",
+            "emotional_reaction",
+            "before_after",
+            "call_to_action"
+          ]
+        },
+        "position": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": { "type": "integer", "minimum": 1, "maximum": 3 },
+          "description": "[row, col]，1-based，左上为 [1,1]"
+        },
+        "duration_sec": {
+          "type": "number",
+          "minimum": 2,
+          "maximum": 5
+        },
+        "camera": { "type": "string", "description": "运镜，建议中英双语" },
+        "lens": { "type": "string", "description": "如 50mm / 85mm macro" },
+        "lighting": { "type": "string" },
+        "composition": { "type": "string" },
+        "mood": { "type": "string" },
+        "action": { "type": "string", "maxLength": 80 },
+        "image_prompt": {
+          "type": "string",
+          "minLength": 30,
+          "maxLength": 400,
+          "description": "用于 Seedream i2i 的 prompt"
+        },
+        "subtitle": {
+          "type": "string",
+          "maxLength": 24,
+          "description": "字幕文案，可为空字符串"
+        },
+        "image_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "由 Seedream 节点回填的参考图 URL"
+        }
+      }
+    }
+  }
+}
