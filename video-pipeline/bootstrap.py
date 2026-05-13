@@ -18,10 +18,17 @@ HERE = Path(__file__).parent.resolve()
 TOOLS = HERE / "tools"
 FFMPEG_DIR = TOOLS / "ffmpeg"
 
-FFMPEG_URL_WIN = (
-    "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/"
+_FFMPEG_PATH = (
+    "github.com/BtbN/FFmpeg-Builds/releases/download/latest/"
     "ffmpeg-master-latest-win64-gpl.zip"
 )
+# 多个 GitHub 加速镜像，按顺序尝试
+FFMPEG_URLS_WIN = [
+    f"https://{_FFMPEG_PATH}",
+    f"https://ghproxy.com/https://{_FFMPEG_PATH}",
+    f"https://gh-proxy.com/https://{_FFMPEG_PATH}",
+    f"https://mirror.ghproxy.com/https://{_FFMPEG_PATH}",
+]
 
 
 def have(cmd: str) -> bool:
@@ -73,19 +80,34 @@ def ensure_ffmpeg():
     if zip_path.exists():
         zip_path.unlink()
 
-    try:
-        # 带进度条下载
-        def progress(blocks, bs, total):
-            pct = min(100, blocks * bs * 100 // max(total, 1))
-            bar = "#" * (pct // 2)
-            sys.stdout.write(f"\r        [{bar:<50}] {pct}%")
-            sys.stdout.flush()
+    def progress(blocks, bs, total):
+        pct = min(100, blocks * bs * 100 // max(total, 1))
+        bar = "#" * (pct // 2)
+        sys.stdout.write(f"\r        [{bar:<50}] {pct}%")
+        sys.stdout.flush()
 
-        urllib.request.urlretrieve(FFMPEG_URL_WIN, zip_path, progress)
-        print()
-    except Exception as e:
-        print(f"\n[ffmpeg] download failed: {e}")
-        print("        Manual fix: download ffmpeg yourself and put ffmpeg.exe in PATH.")
+    downloaded = False
+    for url in FFMPEG_URLS_WIN:
+        host = url.split("/")[2]
+        print(f"[ffmpeg] trying mirror: {host}")
+        try:
+            urllib.request.urlretrieve(url, zip_path, progress)
+            print()
+            downloaded = True
+            break
+        except Exception as e:
+            print(f"\n[ffmpeg] {host} failed: {e}")
+            if zip_path.exists():
+                zip_path.unlink()
+            continue
+
+    if not downloaded:
+        print("[ffmpeg] ERROR: all mirrors failed.")
+        print("        Manual fix: download ffmpeg from one of:")
+        for url in FFMPEG_URLS_WIN:
+            print(f"          {url}")
+        print(f"        Then extract so that ffmpeg.exe lives at:")
+        print(f"          {FFMPEG_DIR}/bin/ffmpeg.exe")
         sys.exit(1)
 
     print("[ffmpeg] extracting...")
@@ -112,7 +134,7 @@ def ensure_ffmpeg():
 
 
 def ensure_yt_dlp():
-    """确保 yt-dlp 可用"""
+    """确保 yt-dlp 可用（自动 fallback 多个 pip 镜像）"""
     try:
         import yt_dlp  # noqa: F401
         print("[yt-dlp] already installed")
@@ -120,16 +142,34 @@ def ensure_yt_dlp():
     except ImportError:
         pass
 
-    print("[yt-dlp] installing via pip...")
-    try:
-        subprocess.check_call(
-            [sys.executable, "-m", "pip", "install", "--quiet", "--upgrade", "yt-dlp"]
-        )
-        print("[yt-dlp] installed")
-    except subprocess.CalledProcessError as e:
-        print(f"[yt-dlp] pip install failed: {e}")
-        print("        Manual fix:  python -m pip install -U yt-dlp")
-        sys.exit(1)
+    # 多个镜像源，按顺序尝试
+    mirrors = [
+        ("default",  None),  # pypi.org
+        ("Tsinghua", "https://pypi.tuna.tsinghua.edu.cn/simple"),
+        ("Aliyun",   "https://mirrors.aliyun.com/pypi/simple/"),
+        ("Huawei",   "https://mirrors.huaweicloud.com/repository/pypi/simple/"),
+        ("USTC",     "https://pypi.mirrors.ustc.edu.cn/simple/"),
+    ]
+
+    for name, url in mirrors:
+        print(f"[yt-dlp] trying pip source: {name}")
+        cmd = [sys.executable, "-m", "pip", "install", "--quiet", "--upgrade", "yt-dlp"]
+        if url:
+            # 国内镜像还要把镜像域名加入信任主机
+            host = url.split("/")[2]
+            cmd += ["-i", url, "--trusted-host", host]
+        try:
+            subprocess.check_call(cmd)
+            print(f"[yt-dlp] installed via {name}")
+            return
+        except subprocess.CalledProcessError:
+            print(f"[yt-dlp] {name} failed, trying next...")
+            continue
+
+    print("[yt-dlp] ERROR: all pip mirrors failed.")
+    print("        Try manually in cmd:")
+    print("        py -3 -m pip install -U yt-dlp -i https://pypi.tuna.tsinghua.edu.cn/simple")
+    sys.exit(1)
 
 
 def run_pipeline():
