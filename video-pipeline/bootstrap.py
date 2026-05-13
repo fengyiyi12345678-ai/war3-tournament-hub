@@ -39,6 +39,27 @@ def add_to_path(p: Path):
     os.environ["PATH"] = str(p) + os.pathsep + os.environ.get("PATH", "")
 
 
+def disable_proxy():
+    """清掉所有代理设置，避免连一个已经挂掉的代理。"""
+    proxy_vars = [
+        "HTTP_PROXY", "HTTPS_PROXY", "ALL_PROXY",
+        "http_proxy", "https_proxy", "all_proxy",
+    ]
+    cleared = []
+    for k in proxy_vars:
+        if k in os.environ:
+            cleared.append(f"{k}={os.environ[k]}")
+            del os.environ[k]
+    if cleared:
+        print(f"[net] cleared dead proxy env: {', '.join(cleared)}")
+    # urllib 在 Windows 上还会读注册表里的代理设置，这里强制无代理
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+    urllib.request.install_opener(opener)
+    # 让子进程也读不到代理
+    os.environ["no_proxy"] = "*"
+    os.environ["NO_PROXY"] = "*"
+
+
 def ensure_ffmpeg():
     """如果系统没 ffmpeg，下载 portable 版到 tools/ffmpeg/"""
     if have("ffmpeg"):
@@ -153,9 +174,15 @@ def ensure_yt_dlp():
 
     for name, url in mirrors:
         print(f"[yt-dlp] trying pip source: {name}")
-        cmd = [sys.executable, "-m", "pip", "install", "--quiet", "--upgrade", "yt-dlp"]
+        # --proxy "" 强制 pip 不走任何代理，再加上短 timeout 跳过卡死的请求
+        cmd = [
+            sys.executable, "-m", "pip", "install",
+            "--upgrade", "yt-dlp",
+            "--proxy", "",
+            "--timeout", "20",
+            "--retries", "1",
+        ]
         if url:
-            # 国内镜像还要把镜像域名加入信任主机
             host = url.split("/")[2]
             cmd += ["-i", url, "--trusted-host", host]
         try:
@@ -190,6 +217,7 @@ def run_pipeline():
 def main():
     print()
     print("[bootstrap] preparing environment...")
+    disable_proxy()
     ensure_yt_dlp()
     ensure_ffmpeg()
     run_pipeline()
