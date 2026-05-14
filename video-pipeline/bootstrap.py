@@ -22,13 +22,18 @@ _FFMPEG_PATH = (
     "github.com/BtbN/FFmpeg-Builds/releases/download/latest/"
     "ffmpeg-master-latest-win64-gpl.zip"
 )
-# 多个 GitHub 加速镜像，按顺序尝试
+# 国内常卡 github.com 原始链接，先试加速镜像，最后才回退到原站
 FFMPEG_URLS_WIN = [
-    f"https://{_FFMPEG_PATH}",
+    f"https://ghfast.top/https://{_FFMPEG_PATH}",
     f"https://ghproxy.com/https://{_FFMPEG_PATH}",
-    f"https://gh-proxy.com/https://{_FFMPEG_PATH}",
     f"https://mirror.ghproxy.com/https://{_FFMPEG_PATH}",
+    f"https://gh-proxy.com/https://{_FFMPEG_PATH}",
+    f"https://hub.gitmirror.com/https://{_FFMPEG_PATH}",
+    f"https://{_FFMPEG_PATH}",
 ]
+
+# 单次连接 / 单块读取超时（秒）。超时立即跳下一个镜像。
+DOWNLOAD_TIMEOUT = 15
 
 
 def have(cmd: str) -> bool:
@@ -101,18 +106,35 @@ def ensure_ffmpeg():
     if zip_path.exists():
         zip_path.unlink()
 
-    def progress(blocks, bs, total):
-        pct = min(100, blocks * bs * 100 // max(total, 1))
-        bar = "#" * (pct // 2)
-        sys.stdout.write(f"\r        [{bar:<50}] {pct}%")
-        sys.stdout.flush()
+    def stream_download(url, dest):
+        """带超时的流式下载——一旦 15 秒内没拿到数据就抛错，避免卡死。"""
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=DOWNLOAD_TIMEOUT) as resp:
+            total = int(resp.headers.get("Content-Length", 0))
+            got = 0
+            last_pct = -1
+            with open(dest, "wb") as f:
+                while True:
+                    chunk = resp.read(64 * 1024)  # 64KB
+                    if not chunk:
+                        break
+                    f.write(chunk)
+                    got += len(chunk)
+                    if total > 0:
+                        pct = min(100, got * 100 // total)
+                        if pct != last_pct:
+                            bar = "#" * (pct // 2)
+                            mb = got / 1024 / 1024
+                            sys.stdout.write(f"\r        [{bar:<50}] {pct:3d}% ({mb:.1f}MB)")
+                            sys.stdout.flush()
+                            last_pct = pct
 
     downloaded = False
     for url in FFMPEG_URLS_WIN:
         host = url.split("/")[2]
-        print(f"[ffmpeg] trying mirror: {host}")
+        print(f"[ffmpeg] trying mirror: {host} (timeout {DOWNLOAD_TIMEOUT}s)")
         try:
-            urllib.request.urlretrieve(url, zip_path, progress)
+            stream_download(url, zip_path)
             print()
             downloaded = True
             break
