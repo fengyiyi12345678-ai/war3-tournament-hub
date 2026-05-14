@@ -1,0 +1,47 @@
+name: 🎬 生成新视频
+description: 提交一对球队，云端自动生成 30 秒抖音视频
+title: "[视频] {主队} vs {客队}"
+labels: ["video-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🎯 自动生成足球短视频
+
+        填写下面表单 → 提交 → 等约 10-15 分钟 → 这个 issue 里会出现下载链接。
+
+  - type: input
+    id: team_a
+    attributes:
+      label: 主队
+      placeholder: "例如：皇马"
+    validations:
+      required: true
+
+  - type: input
+    id: team_b
+    attributes:
+      label: 客队
+      placeholder: "例如：巴萨"
+    validations:
+      required: true
+
+  - type: input
+    id: context
+    attributes:
+      label: 背景 (选填)
+      description: 比如 "西甲国家德比"、"欧冠决赛"、"中超争冠战"
+      placeholder: "西甲国家德比"
+
+  - type: dropdown
+    id: provider
+    attributes:
+      label: 文案生成方式
+      options:
+        - "auto (按可用 secret 自动选)"
+        - "claude (需要 ANTHROPIC_API_KEY secret)"
+        - "deepseek (需要 DEEPSEEK_API_KEY secret)"
+        - "template (本地模板，免费)"
+      default: 0
+    validations:
+      required: true

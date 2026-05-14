@@ -1,0 +1,142 @@
+name: Generate Football Video
+
+on:
+  issues:
+    types: [opened, edited, labeled]
+  workflow_dispatch:
+    inputs:
+      team_a:
+        description: '主队'
+        required: true
+        default: '皇马'
+      team_b:
+        description: '客队'
+        required: true
+        default: '巴萨'
+      context:
+        description: '背景'
+        required: false
+        default: ''
+      provider:
+        description: 'LLM provider'
+        required: true
+        default: 'auto'
+        type: choice
+        options:
+          - auto
+          - claude
+          - deepseek
+          - template
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  generate:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.issue.labels.*.name, 'video-request')
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install ffmpeg + Chinese fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-noto-cjk
+
+      - name: Install Python deps
+        run: pip install --upgrade yt-dlp
+
+      - name: Parse inputs (issue form)
+        if: github.event_name == 'issues'
+        id: parse
+        env:
+          BODY: ${{ github.event.issue.body }}
+        run: |
+          python <<'PY' >> "$GITHUB_OUTPUT"
+          import os, re
+          body = os.environ['BODY'] or ''
+          def grab(label):
+              m = re.search(rf"###\s*{label}\s*\n+([^\n#]+)", body, re.IGNORECASE)
+              return (m.group(1).strip() if m else '').replace('_No response_', '')
+          team_a = grab('主队') or '皇马'
+          team_b = grab('客队') or '巴萨'
+          context = grab(r'背景.*?\(选填\)')
+          provider_raw = grab('文案生成方式') or 'auto'
+          provider = provider_raw.split(' ')[0]
+          print(f"team_a={team_a}")
+          print(f"team_b={team_b}")
+          print(f"context={context}")
+          print(f"provider={provider}")
+          PY
+
+      - name: Resolve inputs
+        id: vars
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "team_a=${{ inputs.team_a }}" >> $GITHUB_OUTPUT
+            echo "team_b=${{ inputs.team_b }}" >> $GITHUB_OUTPUT
+            echo "context=${{ inputs.context }}" >> $GITHUB_OUTPUT
+            echo "provider=${{ inputs.provider }}" >> $GITHUB_OUTPUT
+          else
+            echo "team_a=${{ steps.parse.outputs.team_a }}" >> $GITHUB_OUTPUT
+            echo "team_b=${{ steps.parse.outputs.team_b }}" >> $GITHUB_OUTPUT
+            echo "context=${{ steps.parse.outputs.context }}" >> $GITHUB_OUTPUT
+            echo "provider=${{ steps.parse.outputs.provider }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate video
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: |
+          python generator/generate.py \
+            "${{ steps.vars.outputs.team_a }}" \
+            "${{ steps.vars.outputs.team_b }}" \
+            "${{ steps.vars.outputs.context }}" \
+            --provider "${{ steps.vars.outputs.provider }}"
+
+      - name: Find output
+        id: find
+        run: |
+          MP4=$(ls -t video-pipeline/out/*.mp4 2>/dev/null | head -1)
+          if [ -z "$MP4" ]; then
+            echo "no mp4 produced"; exit 1
+          fi
+          echo "mp4=$MP4" >> $GITHUB_OUTPUT
+          echo "name=$(basename "$MP4")" >> $GITHUB_OUTPUT
+
+      - name: Create release
+        id: release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="video-$(date +%Y%m%d-%H%M%S)"
+          TITLE="${{ steps.vars.outputs.team_a }} vs ${{ steps.vars.outputs.team_b }}"
+          gh release create "$TAG" "${{ steps.find.outputs.mp4 }}" \
+            --title "🎬 $TITLE" \
+            --notes "Generated for ${{ steps.vars.outputs.team_a }} vs ${{ steps.vars.outputs.team_b }} ($(date -u))"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          URL=$(gh release view "$TAG" --json url -q .url)
+          echo "url=$URL" >> $GITHUB_OUTPUT
+
+      - name: Comment on issue
+        if: github.event_name == 'issues'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue comment ${{ github.event.issue.number }} --body "
+          ✅ 视频生成完成！
+
+          📁 文件：\`${{ steps.find.outputs.name }}\`
+          📥 下载：${{ steps.release.outputs.url }}
+
+          直接下载 mp4 然后拖进抖音上传即可。
+          "
+          gh issue close ${{ github.event.issue.number }}

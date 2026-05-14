@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-make_video.py - 跨平台视频生成器（Windows/macOS/Linux 都能跑）
+make_video.py - 跨平台视频生成器
 依赖: yt-dlp (pip install yt-dlp) + ffmpeg (在 PATH 中)
+配置: 默认读取同目录 config.json；不存在则用内置 LAZIO_INTER 兜底
+用法: python make_video.py [config_path]
 """
 import os
 import sys
+import json
 import shutil
 import subprocess
 from pathlib import Path
-
-# ============ 输出参数 ============
-WIDTH, HEIGHT, FPS = 1080, 1920, 30
-OUTPUT_NAME = "lazio_inter_30s.mp4"
 
 # ============ 目录 ============
 HERE = Path(__file__).parent.resolve()
@@ -20,29 +19,47 @@ ASSETS = HERE / "assets"
 CLIPS = HERE / "clips"
 OUT = HERE / "out"
 SRT_FILE = HERE / "subtitles.srt"
+DEFAULT_CONFIG = HERE / "config.json"
 
-# ============ 素材源 ============
-YT_SOURCES = {
-    "inter_celebration": "https://www.youtube.com/watch?v=vgHwOfIB6Qk",
-    # 把意大利地区屏蔽的 DAZN 官方版换成可全球访问的替代源
-    "dazn_highlights":   "https://www.youtube.com/watch?v=H3SXkgNRhMU",
-    "history_2000":      "https://www.youtube.com/watch?v=f4UvzFrClsY",
-    "stadium_aerial":    "https://www.youtube.com/watch?v=w7Ar_QoWPvU",
+# ============ 兜底配置（拉齐奥 vs 国米示例） ============
+FALLBACK_CONFIG = {
+    "video": {"width": 1080, "height": 1920, "fps": 30, "output": "lazio_inter_30s.mp4"},
+    "yt_sources": {
+        "inter_celebration": "https://www.youtube.com/watch?v=vgHwOfIB6Qk",
+        "dazn_highlights":   "https://www.youtube.com/watch?v=H3SXkgNRhMU",
+        "history_2000":      "https://www.youtube.com/watch?v=f4UvzFrClsY",
+        "stadium_aerial":    "https://www.youtube.com/watch?v=w7Ar_QoWPvU",
+    },
+    "timeline": [
+        [1, 2.5, "yt",      "inter_celebration", 6,   "国米已锁意甲冠军",     "账面碾压一切",             "#FFD700"],
+        [2, 3.5, "yt",      "dazn_highlights",   10,  "3 天前 同球场",        "0-3 暴击拉齐奥",           "#FFD700"],
+        [3, 4.0, "overlay", "stadium_aerial",    25,  "国米锋线塌一半",       "图拉姆 · 恰球王 · 小埃斯",  "#FF4D4D"],
+        [4, 3.0, "overlay", "history_2000",      300, "拉齐奥 满血归来",      "队长扎卡尼 · 伤愈回归",    "#00BFFF"],
+        [5, 4.0, "mix",     "history_2000",      120, "26 年前 · 2000 年",    "拉齐奥 2-1 干翻国米",      "sepia"],
+        [6, 5.0, "yt",      "stadium_aerial",    10,  "罗马奥林匹克",         "今晚 · 决战之夜",          "#FFD700"],
+        [7, 5.0, "overlay", "inter_celebration", 60,  "我押 · 拉齐奥拖加时",  "比分 1-2  /  1-1",         "#FFD700"],
+        [8, 3.0, "card",    None,                0,   "你押谁？",             "扣 1 国米  /  扣 2 拉齐奥","#E63946"],
+    ],
 }
 
-# ============ 30 秒时间线 ============
-# (idx, duration, type, source_key, start_sec, title, subtitle, extra)
-TIMELINE = [
-    # idx, duration, type, source_key, start_sec, title, subtitle, extra
-    (1, 2.5, "yt",      "inter_celebration", 6,   "国米已锁意甲冠军",      "账面碾压一切",             "#FFD700"),
-    (2, 3.5, "yt",      "dazn_highlights",   10,  "3 天前 同球场",         "0-3 暴击拉齐奥",           "#FFD700"),
-    (3, 4.0, "overlay", "stadium_aerial",    25,  "国米锋线塌一半",        "图拉姆 · 恰球王 · 小埃斯",   "#FF4D4D"),
-    (4, 3.0, "overlay", "history_2000",      300, "拉齐奥 满血归来",       "队长扎卡尼 · 伤愈回归",     "#00BFFF"),
-    (5, 4.0, "mix",     "history_2000",      120, "26 年前 · 2000 年",     "拉齐奥 2-1 干翻国米",      "sepia"),
-    (6, 5.0, "yt",      "stadium_aerial",    10,  "罗马奥林匹克",          "今晚 · 决战之夜",          "#FFD700"),
-    (7, 5.0, "overlay", "inter_celebration", 60,  "我押 · 拉齐奥拖加时",   "比分 1-2  /  1-1",         "#FFD700"),
-    (8, 3.0, "card",    None,                0,   "你押谁？",              "扣 1 国米  /  扣 2 拉齐奥","#E63946"),
-]
+
+def load_config():
+    """读取 config.json；命令行参数优先于默认路径；都没有就用兜底。"""
+    path = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_CONFIG
+    if path.exists():
+        print(f"[config] loading {path}")
+        return json.loads(path.read_text(encoding="utf-8"))
+    print(f"[config] no config.json found → using built-in Lazio vs Inter sample")
+    return FALLBACK_CONFIG
+
+
+CONFIG = load_config()
+WIDTH = CONFIG["video"]["width"]
+HEIGHT = CONFIG["video"]["height"]
+FPS = CONFIG["video"]["fps"]
+OUTPUT_NAME = CONFIG["video"]["output"]
+YT_SOURCES = CONFIG["yt_sources"]
+TIMELINE = [tuple(row) for row in CONFIG["timeline"]]
 
 # ============ 字体检测 ============
 def find_font():

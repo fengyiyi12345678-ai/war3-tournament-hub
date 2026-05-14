@@ -1,0 +1,36 @@
+{
+  "meta": {
+    "title": "{team_a} VS {team_b} 今晚开战！这 4 个细节决定胜负 🔥",
+    "caption": "⚽ {team_a} 🆚 {team_b}\n{context}\n\n4 个细节决定结果 👇\n① 主场气势 + 状态\n② 关键伤停\n③ 历史交锋数据\n④ 真正的动机\n\n你押谁？评论区扣 1 / 2\n👇 关注我，明天复盘真实战况！\n\n#足球分析 #{team_a} #{team_b} #今晚看球",
+    "hashtags": ["#足球分析", "#今晚看球", "#足球预测", "#体育解说"],
+    "output_filename": "match_30s.mp4"
+  },
+  "yt_search": {
+    "hero_a":  "{team_a} best goals celebration highlights",
+    "hero_b":  "{team_b} best goals celebration highlights",
+    "recent":  "{team_a} vs {team_b} highlights",
+    "history": "{team_a} vs {team_b} classic match",
+    "stadium": "football stadium aerial drone",
+    "fans":    "football fans ultras atmosphere"
+  },
+  "timeline": [
+    [1, 2.5, "yt",      "hero_a",  10,  "{team_a} 这边",        "气势满血归来",         "#FFD700"],
+    [2, 3.5, "yt",      "recent",  20,  "最近一次交手",         "见真章",               "#FFD700"],
+    [3, 4.0, "overlay", "stadium", 25,  "但是 · 别急着下注",    "三个隐形细节",         "#FF4D4D"],
+    [4, 3.0, "overlay", "hero_b",  30,  "{team_b} 反扑信号",    "状态不输任何人",       "#00BFFF"],
+    [5, 4.0, "mix",     "history", 60,  "翻翻旧账",             "他们的历史交锋",       "sepia"],
+    [6, 5.0, "yt",      "stadium", 5,   "今晚的战场",           "氛围已经拉满",         "#FFD700"],
+    [7, 5.0, "overlay", "fans",    10,  "我押 · 90 分钟难分胜负","加时 / 点球大战",      "#FFD700"],
+    [8, 3.0, "card",    null,      0,   "你押谁？",             "扣 1 {team_a}  /  扣 2 {team_b}", "#E63946"]
+  ],
+  "subtitles": [
+    {"start": 0.0,  "end": 2.5,  "text": "{team_a} 状态正盛"},
+    {"start": 2.5,  "end": 6.0,  "text": "最近一次交手出过事"},
+    {"start": 6.0,  "end": 10.0, "text": "但有 3 个细节没人说"},
+    {"start": 10.0, "end": 13.0, "text": "{team_b} 反扑信号已现"},
+    {"start": 13.0, "end": 17.0, "text": "翻翻他俩的历史账"},
+    {"start": 17.0, "end": 22.0, "text": "今晚战场氛围已拉满"},
+    {"start": 22.0, "end": 27.0, "text": "我押 90 分钟难分胜负"},
+    {"start": 27.0, "end": 30.0, "text": "扣 1 / 扣 2 评论区见"}
+  ]
+}

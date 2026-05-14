@@ -1,0 +1,36 @@
+{
+  "meta": {
+    "title": "{team_a} VS {team_b} 德比之夜！这场不只是 3 分 🔥",
+    "caption": "🔥 德比之夜 · {team_a} 🆚 {team_b}\n\n这场比赛 ——\n不只是 3 分，是脸面\n不只是排名，是城市荣誉\n不只是胜负，是几十年的恩怨\n\n📊 我的预测：见正文\n你支持谁？评论区扣 1 / 2\n👇 关注我，全程跟进！\n\n#德比 #{team_a} #{team_b} #足球分析",
+    "hashtags": ["#德比", "#足球分析", "#今晚看球", "#球迷日常"],
+    "output_filename": "derby_30s.mp4"
+  },
+  "yt_search": {
+    "hero_a":  "{team_a} fans tifo derby ultras",
+    "hero_b":  "{team_b} fans tifo derby ultras",
+    "recent":  "{team_a} vs {team_b} derby recent",
+    "history": "{team_a} vs {team_b} derby classic moments",
+    "stadium": "derby stadium atmosphere night",
+    "fans":    "ultras derby fans flares smoke"
+  },
+  "timeline": [
+    [1, 2.5, "yt",      "hero_a",  5,   "今晚不是普通比赛",      "是城市之战",            "#FFD700"],
+    [2, 3.5, "yt",      "recent",  15,  "上一次德比",            "全城都在屏息",          "#FFD700"],
+    [3, 4.0, "overlay", "fans",    10,  "{team_a} 球迷的心声",   "我们必须赢",            "#FF4D4D"],
+    [4, 3.0, "overlay", "hero_b",  20,  "{team_b} 不答应",       "面子不能丢",            "#00BFFF"],
+    [5, 4.0, "mix",     "history", 30,  "几十年的恩怨",          "今晚续写新篇章",        "sepia"],
+    [6, 5.0, "yt",      "stadium", 5,   "看台已经满了",          "TIFO 准备就绪",         "#FFD700"],
+    [7, 5.0, "overlay", "fans",    20,  "我押 · 火药味十足",     "进球数 ≥ 3 · 红牌可能", "#FFD700"],
+    [8, 3.0, "card",    null,      0,   "你押谁赢？",            "扣 1 {team_a}  /  扣 2 {team_b}", "#E63946"]
+  ],
+  "subtitles": [
+    {"start": 0.0,  "end": 2.5,  "text": "今晚不是普通比赛"},
+    {"start": 2.5,  "end": 6.0,  "text": "上次德比全城屏息"},
+    {"start": 6.0,  "end": 10.0, "text": "{team_a} 球迷：必须赢"},
+    {"start": 10.0, "end": 13.0, "text": "{team_b}：面子不能丢"},
+    {"start": 13.0, "end": 17.0, "text": "几十年恩怨写新篇"},
+    {"start": 17.0, "end": 22.0, "text": "TIFO 准备就绪开场"},
+    {"start": 22.0, "end": 27.0, "text": "我押火药味十足"},
+    {"start": 27.0, "end": 30.0, "text": "扣 1 / 扣 2 评论区见"}
+  ]
+}
