@@ -44,25 +44,31 @@ def add_to_path(p: Path):
     os.environ["PATH"] = str(p) + os.pathsep + os.environ.get("PATH", "")
 
 
-def disable_proxy():
-    """清掉所有代理设置，避免连一个已经挂掉的代理。"""
-    proxy_vars = [
-        "HTTP_PROXY", "HTTPS_PROXY", "ALL_PROXY",
-        "http_proxy", "https_proxy", "all_proxy",
-    ]
-    cleared = []
-    for k in proxy_vars:
-        if k in os.environ:
-            cleared.append(f"{k}={os.environ[k]}")
-            del os.environ[k]
-    if cleared:
-        print(f"[net] cleared dead proxy env: {', '.join(cleared)}")
-    # urllib 在 Windows 上还会读注册表里的代理设置，这里强制无代理
-    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
-    urllib.request.install_opener(opener)
-    # 让子进程也读不到代理
-    os.environ["no_proxy"] = "*"
-    os.environ["NO_PROXY"] = "*"
+_PROXY_VARS = (
+    "HTTP_PROXY", "HTTPS_PROXY", "ALL_PROXY",
+    "http_proxy", "https_proxy", "all_proxy",
+)
+
+
+def no_proxy_env() -> dict:
+    """返回一份去掉了代理变量的 env 副本（只用于 pip/ffmpeg 调用，不动全局）。"""
+    env = os.environ.copy()
+    for k in _PROXY_VARS:
+        env.pop(k, None)
+    env["no_proxy"] = "*"
+    env["NO_PROXY"] = "*"
+    return env
+
+
+def report_proxy_status():
+    """显示当前代理状态，方便用户判断是否要开 VPN。"""
+    active = {k: os.environ[k] for k in _PROXY_VARS if k in os.environ}
+    if active:
+        print(f"[net] proxy env detected: {', '.join(active.keys())}")
+        print(f"      yt-dlp will use this proxy to reach YouTube.")
+    else:
+        print("[net] no proxy env var set.")
+        print("      If YouTube downloads fail, OPEN your VPN client and rerun.")
 
 
 def ensure_ffmpeg():
@@ -106,10 +112,13 @@ def ensure_ffmpeg():
     if zip_path.exists():
         zip_path.unlink()
 
+    # ffmpeg 下载用临时 no-proxy opener，不影响全局
+    no_proxy_opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
     def stream_download(url, dest):
         """带超时的流式下载——一旦 15 秒内没拿到数据就抛错，避免卡死。"""
         req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        with urllib.request.urlopen(req, timeout=DOWNLOAD_TIMEOUT) as resp:
+        with no_proxy_opener.open(req, timeout=DOWNLOAD_TIMEOUT) as resp:
             total = int(resp.headers.get("Content-Length", 0))
             got = 0
             last_pct = -1
@@ -196,7 +205,6 @@ def ensure_yt_dlp():
 
     for name, url in mirrors:
         print(f"[yt-dlp] trying pip source: {name}")
-        # --proxy "" 强制 pip 不走任何代理，再加上短 timeout 跳过卡死的请求
         cmd = [
             sys.executable, "-m", "pip", "install",
             "--upgrade", "yt-dlp",
@@ -208,7 +216,7 @@ def ensure_yt_dlp():
             host = url.split("/")[2]
             cmd += ["-i", url, "--trusted-host", host]
         try:
-            subprocess.check_call(cmd)
+            subprocess.check_call(cmd, env=no_proxy_env())
             print(f"[yt-dlp] installed via {name}")
             return
         except subprocess.CalledProcessError:
@@ -239,9 +247,9 @@ def run_pipeline():
 def main():
     print()
     print("[bootstrap] preparing environment...")
-    disable_proxy()
     ensure_yt_dlp()
     ensure_ffmpeg()
+    report_proxy_status()
     run_pipeline()
 
 

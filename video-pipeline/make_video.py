@@ -116,6 +116,9 @@ def download_assets():
             "outtmpl": str(target),
             "quiet": False,
             "no_warnings": True,
+            "socket_timeout": 20,
+            "retries": 2,
+            "fragment_retries": 2,
         }
         try:
             with yt_dlp.YoutubeDL(opts) as ydl:
