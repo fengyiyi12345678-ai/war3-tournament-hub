@@ -24,7 +24,8 @@ SRT_FILE = HERE / "subtitles.srt"
 # ============ 素材源 ============
 YT_SOURCES = {
     "inter_celebration": "https://www.youtube.com/watch?v=vgHwOfIB6Qk",
-    "dazn_highlights":   "https://www.youtube.com/watch?v=4iRpY1KXfOY",
+    # 把意大利地区屏蔽的 DAZN 官方版换成可全球访问的替代源
+    "dazn_highlights":   "https://www.youtube.com/watch?v=H3SXkgNRhMU",
     "history_2000":      "https://www.youtube.com/watch?v=f4UvzFrClsY",
     "stadium_aerial":    "https://www.youtube.com/watch?v=w7Ar_QoWPvU",
 }
