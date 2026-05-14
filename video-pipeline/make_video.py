@@ -33,14 +33,15 @@ YT_SOURCES = {
 # ============ 30 秒时间线 ============
 # (idx, duration, type, source_key, start_sec, title, subtitle, extra)
 TIMELINE = [
-    (1, 2.5, "yt",   "inter_celebration", 6,   "国米已锁意甲冠军",   "账面碾压一切",           "#000000"),
-    (2, 3.5, "yt",   "dazn_highlights",   10,  "3 天前 同球场",      "0-3 暴击拉齐奥",         "#001A4D"),
-    (3, 4.0, "card", None,                0,   "🚨 国米锋线塌一半",  "图拉姆 X 恰球王 X 小埃斯", "#1A0000"),
-    (4, 3.0, "card", None,                0,   "🦅 拉齐奥反扑",      "队长扎卡尼伤愈回归",     "#009EE0"),
-    (5, 4.0, "mix",  "history_2000",      120, "26 年前 · 2000 年",  "拉齐奥 2-1 干翻国米",    "sepia"),
-    (6, 5.0, "yt",   "stadium_aerial",    10,  "罗马奥林匹克",       "今晚 · 决战之夜",        "#0F2027"),
-    (7, 5.0, "card", None,                0,   "🎯 预测",            "拉齐奥拖加时 / 1-2 / 1-1","#0F0F14"),
-    (8, 3.0, "card", None,                0,   "你押谁？",           "扣 1 国米 · 扣 2 拉齐奥","#E63946"),
+    # idx, duration, type, source_key, start_sec, title, subtitle, extra
+    (1, 2.5, "yt",      "inter_celebration", 6,   "国米已锁意甲冠军",      "账面碾压一切",             "#FFD700"),
+    (2, 3.5, "yt",      "dazn_highlights",   10,  "3 天前 同球场",         "0-3 暴击拉齐奥",           "#FFD700"),
+    (3, 4.0, "overlay", "stadium_aerial",    25,  "国米锋线塌一半",        "图拉姆 · 恰球王 · 小埃斯",   "#FF4D4D"),
+    (4, 3.0, "overlay", "history_2000",      300, "拉齐奥 满血归来",       "队长扎卡尼 · 伤愈回归",     "#00BFFF"),
+    (5, 4.0, "mix",     "history_2000",      120, "26 年前 · 2000 年",     "拉齐奥 2-1 干翻国米",      "sepia"),
+    (6, 5.0, "yt",      "stadium_aerial",    10,  "罗马奥林匹克",          "今晚 · 决战之夜",          "#FFD700"),
+    (7, 5.0, "overlay", "inter_celebration", 60,  "我押 · 拉齐奥拖加时",   "比分 1-2  /  1-1",         "#FFD700"),
+    (8, 3.0, "card",    None,                0,   "你押谁？",              "扣 1 国米  /  扣 2 拉齐奥","#E63946"),
 ]
 
 # ============ 字体检测 ============
@@ -128,8 +129,26 @@ def download_assets():
             print(f"⚠️  下载失败 [{key}]: {e}")
             print(f"   你也可以手动下载并保存为: {target}")
 
-# ============ 渲染单个 YT 片段 ============
-def make_yt_clip(idx, dur, src_key, start, title, sub, extra):
+# ============ 文字排版样式（统一品牌设计） ============
+# 标题：金色，主标语 / 副标：白色，辅助说明
+TITLE_COLOR  = "#FFD700"
+SUB_COLOR    = "#FFFFFF"
+SHADOW       = "shadowx=3:shadowy=4:shadowcolor=black@0.85"
+TITLE_SIZE   = 78
+SUB_SIZE     = 46
+ACCENT_W     = 240   # 装饰横线宽度
+ACCENT_H     = 5     # 装饰横线高度
+
+
+def _accent_line(y: int, color_hex: str) -> str:
+    """生成一条居中横线滤镜串。"""
+    x = (WIDTH - ACCENT_W) // 2
+    c = color_hex.replace("#", "0x")
+    return f",drawbox=x={x}:y={y}:w={ACCENT_W}:h={ACCENT_H}:color={c}:t=fill"
+
+
+# ============ 1) 渲染 YouTube 片段（底部叠加文字） ============
+def make_yt_clip(idx, dur, src_key, start, title, sub, accent):
     src = ASSETS / f"{src_key}.mp4"
     out = CLIPS / f"clip{idx:02d}.mp4"
     if not src.exists():
@@ -137,17 +156,25 @@ def make_yt_clip(idx, dur, src_key, start, title, sub, extra):
         return make_card(idx, dur, title, sub, "#1A1A1A")
 
     vf = f"scale={WIDTH}:{HEIGHT}:force_original_aspect_ratio=increase,crop={WIDTH}:{HEIGHT},fps={FPS},setsar=1,format=yuv420p"
-    if extra == "sepia":
+    if accent == "sepia":
         vf += ",colorchannelmixer=.393:.769:.189:0:.349:.686:.168:0:.272:.534:.131,noise=alls=12:allf=t"
+        accent = TITLE_COLOR
 
     if FONT and title:
-        font_p = font_escape(FONT)
-        # drawbox 在某些 FFmpeg master 版本下不能识别表达式 'w'/'h'，
-        # 这里改用硬编码数字（前面已 scale+crop 到 WIDTH x HEIGHT）
-        box_y = HEIGHT - 360
-        vf += f",drawbox=x=0:y={box_y}:w={WIDTH}:h=360:color=black@0.6:t=fill"
-        vf += f",drawtext=fontfile='{font_p}':text='{text_escape(title)}':fontsize=64:fontcolor=#FFD700:x=({WIDTH}-text_w)/2:y={HEIGHT - 280}:borderw=3:bordercolor=black"
-        vf += f",drawtext=fontfile='{font_p}':text='{text_escape(sub)}':fontsize=42:fontcolor=white:x=({WIDTH}-text_w)/2:y={HEIGHT - 180}:borderw=2:bordercolor=black"
+        fp = font_escape(FONT)
+        # 底部 420px 高的半透明黑色面板
+        panel_y = HEIGHT - 420
+        vf += f",drawbox=x=0:y={panel_y}:w={WIDTH}:h=420:color=black@0.55:t=fill"
+        # 顶部金色装饰横线
+        vf += _accent_line(panel_y + 30, accent)
+        # 标题
+        title_y = panel_y + 80
+        vf += f",drawtext=fontfile='{fp}':text='{text_escape(title)}':fontsize={TITLE_SIZE}:fontcolor={TITLE_COLOR}:x=({WIDTH}-text_w)/2:y={title_y}:borderw=4:bordercolor=#0A0A0A:{SHADOW}"
+        # 副标题
+        sub_y = title_y + TITLE_SIZE + 30
+        vf += f",drawtext=fontfile='{fp}':text='{text_escape(sub)}':fontsize={SUB_SIZE}:fontcolor={SUB_COLOR}:x=({WIDTH}-text_w)/2:y={sub_y}:borderw=3:bordercolor=#0A0A0A"
+        # 底部装饰横线
+        vf += _accent_line(sub_y + SUB_SIZE + 35, accent)
 
     print(f"🎞  [{idx}] 截取 {src_key} +{start}s/{dur}s")
     cmd = [
@@ -159,15 +186,57 @@ def make_yt_clip(idx, dur, src_key, start, title, sub, extra):
     ]
     subprocess.run(cmd, check=True)
 
-# ============ 渲染文字卡片 ============
+
+# ============ 2) 渲染叠加片段（YouTube 当背景 + 居中大字） ============
+def make_overlay_clip(idx, dur, src_key, start, title, sub, accent):
+    """背景视频压暗 + 居中大标题 + 装饰横线，用于把"文字卡片"升级成"视频+文字"。"""
+    src = ASSETS / f"{src_key}.mp4"
+    out = CLIPS / f"clip{idx:02d}.mp4"
+    if not src.exists():
+        print(f"⚠️  缺素材 {src.name} → 用占位卡片替代")
+        return make_card(idx, dur, title, sub, "#1A1A1A")
+
+    vf = f"scale={WIDTH}:{HEIGHT}:force_original_aspect_ratio=increase,crop={WIDTH}:{HEIGHT},fps={FPS},setsar=1,format=yuv420p"
+    # 压暗 + 降饱和度，让文字更突出
+    vf += ",eq=brightness=-0.35:saturation=0.6"
+    # 全屏半透明深色蒙层
+    vf += f",drawbox=x=0:y=0:w={WIDTH}:h={HEIGHT}:color=black@0.5:t=fill"
+
+    if FONT and title:
+        fp = font_escape(FONT)
+        mid = HEIGHT // 2
+        # 顶部装饰横线
+        vf += _accent_line(mid - 200, accent)
+        # 大标题
+        vf += f",drawtext=fontfile='{fp}':text='{text_escape(title)}':fontsize=92:fontcolor=white:x=({WIDTH}-text_w)/2:y={mid-130}:borderw=5:bordercolor=#0A0A0A:{SHADOW}"
+        # 副标题
+        vf += f",drawtext=fontfile='{fp}':text='{text_escape(sub)}':fontsize=52:fontcolor={TITLE_COLOR}:x=({WIDTH}-text_w)/2:y={mid+40}:borderw=3:bordercolor=#0A0A0A:{SHADOW}"
+        # 底部装饰横线
+        vf += _accent_line(mid + 180, accent)
+
+    print(f"🌃 [{idx}] 视频+大字 {src_key} +{start}s/{dur}s")
+    cmd = [
+        "ffmpeg", "-y", "-loglevel", "error",
+        "-ss", str(start), "-i", str(src),
+        "-t", str(dur), "-vf", vf, "-an",
+        "-c:v", "libx264", "-preset", "fast", "-crf", "20",
+        str(out)
+    ]
+    subprocess.run(cmd, check=True)
+
+
+# ============ 3) 纯色文字卡片（仅用于结尾 CTA） ============
 def make_card(idx, dur, title, sub, bg):
     out = CLIPS / f"clip{idx:02d}.mp4"
     bg_hex = bg.replace("#", "0x")
     vf = "format=yuv420p"
     if FONT:
-        font_p = font_escape(FONT)
-        vf += f",drawtext=fontfile='{font_p}':text='{text_escape(title)}':fontsize=92:fontcolor=white:x=({WIDTH}-text_w)/2:y=({HEIGHT}-text_h)/2-100:borderw=4:bordercolor=black"
-        vf += f",drawtext=fontfile='{font_p}':text='{text_escape(sub)}':fontsize=46:fontcolor=#FFD700:x=({WIDTH}-text_w)/2:y=({HEIGHT}-text_h)/2+60:borderw=3:bordercolor=black"
+        fp = font_escape(FONT)
+        mid = HEIGHT // 2
+        vf += _accent_line(mid - 220, TITLE_COLOR)
+        vf += f",drawtext=fontfile='{fp}':text='{text_escape(title)}':fontsize=108:fontcolor=white:x=({WIDTH}-text_w)/2:y={mid-140}:borderw=5:bordercolor=#0A0A0A:{SHADOW}"
+        vf += f",drawtext=fontfile='{fp}':text='{text_escape(sub)}':fontsize=56:fontcolor={TITLE_COLOR}:x=({WIDTH}-text_w)/2:y={mid+40}:borderw=3:bordercolor=#0A0A0A:{SHADOW}"
+        vf += _accent_line(mid + 200, TITLE_COLOR)
     print(f"🃏 [{idx}] 文字卡片: {title}")
     cmd = [
         "ffmpeg", "-y", "-loglevel", "error",
@@ -263,6 +332,8 @@ def main():
         idx, dur, typ, src, start, title, sub, extra = entry
         if typ in ("yt", "mix"):
             make_yt_clip(idx, dur, src, start, title, sub, extra)
+        elif typ == "overlay":
+            make_overlay_clip(idx, dur, src, start, title, sub, extra)
         else:
             make_card(idx, dur, title, sub, extra)
     print()
