@@ -142,9 +142,12 @@ def make_yt_clip(idx, dur, src_key, start, title, sub, extra):
 
     if FONT and title:
         font_p = font_escape(FONT)
-        vf += f",drawbox=x=0:y=h-360:w=w:h=360:color=black@0.6:t=fill"
-        vf += f",drawtext=fontfile='{font_p}':text='{text_escape(title)}':fontsize=64:fontcolor=#FFD700:x=(w-text_w)/2:y=h-280:borderw=3:bordercolor=black"
-        vf += f",drawtext=fontfile='{font_p}':text='{text_escape(sub)}':fontsize=42:fontcolor=white:x=(w-text_w)/2:y=h-180:borderw=2:bordercolor=black"
+        # drawbox 在某些 FFmpeg master 版本下不能识别表达式 'w'/'h'，
+        # 这里改用硬编码数字（前面已 scale+crop 到 WIDTH x HEIGHT）
+        box_y = HEIGHT - 360
+        vf += f",drawbox=x=0:y={box_y}:w={WIDTH}:h=360:color=black@0.6:t=fill"
+        vf += f",drawtext=fontfile='{font_p}':text='{text_escape(title)}':fontsize=64:fontcolor=#FFD700:x=({WIDTH}-text_w)/2:y={HEIGHT - 280}:borderw=3:bordercolor=black"
+        vf += f",drawtext=fontfile='{font_p}':text='{text_escape(sub)}':fontsize=42:fontcolor=white:x=({WIDTH}-text_w)/2:y={HEIGHT - 180}:borderw=2:bordercolor=black"
 
     print(f"🎞  [{idx}] 截取 {src_key} +{start}s/{dur}s")
     cmd = [
@@ -163,8 +166,8 @@ def make_card(idx, dur, title, sub, bg):
     vf = "format=yuv420p"
     if FONT:
         font_p = font_escape(FONT)
-        vf += f",drawtext=fontfile='{font_p}':text='{text_escape(title)}':fontsize=92:fontcolor=white:x=(w-text_w)/2:y=(h-text_h)/2-100:borderw=4:bordercolor=black"
-        vf += f",drawtext=fontfile='{font_p}':text='{text_escape(sub)}':fontsize=46:fontcolor=#FFD700:x=(w-text_w)/2:y=(h-text_h)/2+60:borderw=3:bordercolor=black"
+        vf += f",drawtext=fontfile='{font_p}':text='{text_escape(title)}':fontsize=92:fontcolor=white:x=({WIDTH}-text_w)/2:y=({HEIGHT}-text_h)/2-100:borderw=4:bordercolor=black"
+        vf += f",drawtext=fontfile='{font_p}':text='{text_escape(sub)}':fontsize=46:fontcolor=#FFD700:x=({WIDTH}-text_w)/2:y=({HEIGHT}-text_h)/2+60:borderw=3:bordercolor=black"
     print(f"🃏 [{idx}] 文字卡片: {title}")
     cmd = [
         "ffmpeg", "-y", "-loglevel", "error",
