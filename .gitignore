@@ -17,7 +17,7 @@ pip-log.txt
 pip-delete-this-directory.txt
 
 # Generated files
-*.mp4
+# *.mp4  # Allow mp4 files for video content
 *.avi
 *.mov
 *.wmv
